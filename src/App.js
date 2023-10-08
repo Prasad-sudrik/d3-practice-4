@@ -45,6 +45,19 @@ function App() {
       .attr("x", (value, index) => xScale(index))
       .attr("y", -150)
       .attr("width", xScale.bandwidth())
+      .on("mouseenter", (value, index) => {
+        svg
+          .selectAll(".tooltip")
+          .data([value])
+          .join("text")
+          .attr("class", "tooltip")
+          .text(value)
+          .attr("x", xScale(index))
+          .attr("y", yScale(value) - 8)
+          .transition()
+          .attr("opacity", 1);
+      })
+      .on("mouseleave", () => svg.select(".tooltip").remove())
       .transition()
       .attr("fill", colorScale)
       .attr("height", (value) => 150 - yScale(value));
@@ -66,6 +79,11 @@ function App() {
       </button>
       <button onClick={() => setData(data.filter((value) => value < 35))}>
         Filter data
+      </button>
+      <button
+        onClick={() => setData([...data, Math.round(Math.random() * 100)])}
+      >
+        Add data
       </button>
     </React.Fragment>
   );
